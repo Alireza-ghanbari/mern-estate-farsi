@@ -1,21 +1,24 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { PulseLoader } from "react-spinners";
+import { app } from "../firebase";
 import {
   getDownloadURL,
   getStorage,
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
-import { app } from "../firebase";
 import {
   deleteUserFailure,
   deleteUserStart,
   deleteUserSuccess,
+  signOutUserFailure,
+  signOutUserStart,
+  signOutUserSuccess,
   updateUserFailure,
   updateUserStart,
   updateUserSuccess,
 } from "../redux/user/userSlice";
-import { PulseLoader } from "react-spinners";
 
 export default function Profile() {
   const fileRef = useRef(null);
@@ -106,6 +109,21 @@ export default function Profile() {
     }
   }
 
+  const handleSignOut = async() => {
+    try {
+      dispatch(signOutUserStart())
+      const res = await fetch(`/api/auth/signout`)
+      const data = await res.json()
+      if(data.error){
+        dispatch(signOutUserFailure(data.error))
+        return
+      }
+      dispatch(signOutUserSuccess(data))
+    } catch (error) {
+      dispatch(signOutUserFailure(error.message))
+    }
+  }
+
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="text-3xl font-semibold text-center my-7">پروفایل</h1>
@@ -173,7 +191,7 @@ export default function Profile() {
 
       <div className="flex justify-between mt-5">
         <span onClick={handleDeleteUser} className="text-red-700 cursor-pointer">پاک کردن حساب</span>
-        <span className="text-slate-700 cursor-pointer">خروج از حساب</span>
+        <span onClick={handleSignOut} className="text-slate-700 cursor-pointer">خروج از حساب</span>
       </div>
 
       <p className="text-red-700 mt-5">{error && error}</p>
