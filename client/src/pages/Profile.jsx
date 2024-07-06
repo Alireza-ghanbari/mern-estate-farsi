@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { PulseLoader } from "react-spinners";
 import { app } from "../firebase";
+import { Link } from "react-router-dom";
 import {
   getDownloadURL,
   getStorage,
@@ -89,40 +90,39 @@ export default function Profile() {
     }
   };
 
-  const handleDeleteUser = async() => {
+  const handleDeleteUser = async () => {
     try {
-      dispatch(deleteUserStart())
+      dispatch(deleteUserStart());
       const res = await fetch(`/api/user/delete/${currentUser._id}`, {
-        method: "DELETE"
-      })
-      const data = await res.json()
+        method: "DELETE",
+      });
+      const data = await res.json();
 
-      if(data.error){
-        dispatch(deleteUserFailure(data.error))
-        return
+      if (data.error) {
+        dispatch(deleteUserFailure(data.error));
+        return;
       }
 
-      dispatch(deleteUserSuccess(data))
-
+      dispatch(deleteUserSuccess(data));
     } catch (error) {
-      dispatch(deleteUserFailure(error.message))
+      dispatch(deleteUserFailure(error.message));
     }
-  }
+  };
 
-  const handleSignOut = async() => {
+  const handleSignOut = async () => {
     try {
-      dispatch(signOutUserStart())
-      const res = await fetch(`/api/auth/signout`)
-      const data = await res.json()
-      if(data.error){
-        dispatch(signOutUserFailure(data.error))
-        return
+      dispatch(signOutUserStart());
+      const res = await fetch(`/api/auth/signout`);
+      const data = await res.json();
+      if (data.error) {
+        dispatch(signOutUserFailure(data.error));
+        return;
       }
-      dispatch(signOutUserSuccess(data))
+      dispatch(signOutUserSuccess(data));
     } catch (error) {
-      dispatch(signOutUserFailure(error.message))
+      dispatch(signOutUserFailure(error.message));
     }
-  }
+  };
 
   return (
     <div className="p-3 max-w-lg mx-auto">
@@ -187,11 +187,24 @@ export default function Profile() {
         >
           {loading ? <PulseLoader size={10} /> : "بروز رسانی"}
         </button>
+        <Link
+          to={"/create-listing"}
+          className="bg-green-700 text-white p-3 rounded-lg text-center hover:opacity-95"
+        >
+          افزودن اگهی
+        </Link>
       </form>
 
       <div className="flex justify-between mt-5">
-        <span onClick={handleDeleteUser} className="text-red-700 cursor-pointer">پاک کردن حساب</span>
-        <span onClick={handleSignOut} className="text-slate-700 cursor-pointer">خروج از حساب</span>
+        <span
+          onClick={handleDeleteUser}
+          className="text-red-700 cursor-pointer"
+        >
+          پاک کردن حساب
+        </span>
+        <span onClick={handleSignOut} className="text-slate-700 cursor-pointer">
+          خروج از حساب
+        </span>
       </div>
 
       <p className="text-red-700 mt-5">{error && error}</p>
