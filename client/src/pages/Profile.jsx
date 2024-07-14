@@ -214,6 +214,7 @@ export default function Profile() {
           ? "اطلاعات بروز رسانی شد"
           : ""}
       </p>
+      <button className="text-green-700">نمایش آگهی ها</button>
     </div>
   );
 }
