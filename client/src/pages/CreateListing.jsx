@@ -346,7 +346,7 @@ export default function CreateListing() {
               className="z-0 p-3 text-green-700 border border-green-700 rounded hover:shadow-lg disabled:opacity-60"
             >
               {uploading ? (
-                <div className="py-2 px-3 flex">
+                <div className="py-2 px-3 flex justify-center">
                   <PulseLoader size={5} />
                 </div>
               ) : (
