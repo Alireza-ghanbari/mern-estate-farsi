@@ -141,6 +141,25 @@ export default function Profile() {
     }
   };
 
+  const handleDeleteListing = async (listingId) => {
+    try {
+      const res = await fetch(`/api/listing/delete/${listingId}`,{
+        method: "DELETE"
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        console.log(data.message);
+        return;
+      }
+
+      setUserListings((perv) =>
+        perv.filter((listing) => listing._id !== listingId)
+      );
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="text-3xl font-semibold text-center my-7">پروفایل</h1>
@@ -240,7 +259,9 @@ export default function Profile() {
 
       {userListings && userListings.length > 0 && (
         <div className=" flex flex-col gap-4 pb-24">
-          <h1 className="text-center mt-7 text-2xl font-semibold">آگهی های شما</h1>
+          <h1 className="text-center mt-7 text-2xl font-semibold">
+            آگهی های شما
+          </h1>
           {userListings.map((listing) => (
             <div
               key={listing._id}
@@ -261,7 +282,12 @@ export default function Profile() {
               </Link>
 
               <div className="flex flex-col items-center">
-                <button className="text-red-700">پاک کردن</button>
+                <button
+                  onClick={() => handleDeleteListing(listing._id)}
+                  className="text-red-700"
+                >
+                  پاک کردن
+                </button>
                 <button className="text-green-700">ویرایش</button>
               </div>
             </div>
