@@ -22,8 +22,42 @@ export const deleteListing = async (req, res, next) => {
   }
 
   try {
-    await Listing.findByIdAndDelete(req.params.id)
-    res.status(200).json("آگهی با موفقیت پاک شد")
+    await Listing.findByIdAndDelete(req.params.id);
+    res.status(200).json("آگهی با موفقیت پاک شد");
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateListing = async (req, res, next) => {
+  const listing = await Listing.findById(req.params.id);
+  if (!listing) {
+    return next(errorHandler(404, "آگهی پیدا نشد"));
+  }
+  if (req.user.id !== listing.userRef) {
+    return next(errorHandler(401, "فقط میتوانید آگهی خود را ویرایش کنید"));
+  }
+
+  try {
+    const updatedListing = await Listing.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+    res.status(200).json(updatedListing);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getListing = async (req, res, next) => {
+  try {
+    const listing = await Listing.findById(req.params.id);
+    if (!listing) {
+      return next(errorHandler(404, "آگهی پیدا نشد"));
+    }
+
+    res.status(200).json(listing);
   } catch (error) {
     next(error);
   }

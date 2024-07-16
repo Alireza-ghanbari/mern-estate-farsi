@@ -143,8 +143,8 @@ export default function Profile() {
 
   const handleDeleteListing = async (listingId) => {
     try {
-      const res = await fetch(`/api/listing/delete/${listingId}`,{
-        method: "DELETE"
+      const res = await fetch(`/api/listing/delete/${listingId}`, {
+        method: "DELETE",
       });
       const data = await res.json();
       if (!res.ok) {
@@ -288,7 +288,9 @@ export default function Profile() {
                 >
                   پاک کردن
                 </button>
-                <button className="text-green-700">ویرایش</button>
+                <Link to={`/update-listing/${listing._id}`}>
+                  <button className="text-green-700">ویرایش</button>
+                </Link>
               </div>
             </div>
           ))}
