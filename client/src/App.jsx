@@ -6,11 +6,12 @@ import SignUp from "./pages/SignUp";
 import About from "./pages/About";
 import Profile from "./pages/Profile";
 import CreateListing from "./pages/CreateListing";
+import UpdateListing from "./pages/UpdateListing";
+import ListingPage from "./pages/ListingPage";
 
 import Navbar from "./components/Navbar";
 import PrivateRoute from "./components/PrivateRoute";
 import { useSelector } from "react-redux";
-import UpdateListing from "./pages/UpdateListing";
 
 export default function App() {
   const { currentUser } = useSelector((state) => state.user);
@@ -22,6 +23,7 @@ export default function App() {
         <Route path="/sign-in" element={currentUser? <Navigate to={"/"}/> : <SignIn/>} />
         <Route path="/sign-up" element={currentUser? <Navigate to={"/"}/> : <SignUp />} />
         <Route path="/about" element={<About />} />
+        <Route path="/listing/:listingId" element={<ListingPage />} />
         <Route element={<PrivateRoute />}>
           <Route path="/profile" element={<Profile />} />
           <Route path="/create-listing" element={<CreateListing />} />
