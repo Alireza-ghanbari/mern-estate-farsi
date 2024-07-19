@@ -14,6 +14,7 @@ import {
   FaParking,
   FaShare,
 } from "react-icons/fa";
+import Contact from "../components/Contact";
 
 export default function ListingPage() {
   SwiperCore.use([Navigation]);
@@ -21,6 +22,9 @@ export default function ListingPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [contact, setContact] = useState(false);
+
+  const { currentUser } = useSelector((state) => state.user);
 
   const params = useParams();
 
@@ -61,7 +65,7 @@ export default function ListingPage() {
             {listing.imageUrls.map((url) => (
               <SwiperSlide key={url}>
                 <div
-                  className="h-[550px]"
+                  className="h-[550px] -z-50"
                   style={{
                     background: `url(${url}) center no-repeat`,
                     backgroundSize: "cover",
@@ -89,7 +93,9 @@ export default function ListingPage() {
           )}
           <div className="flex flex-col max-w-4xl mx-auto p-3 my-7 gap-4">
             <p className="text-xl sm:text-2xl font-semibold">
-              <span className="block w-full xs:hidden mb-2">{listing.name}</span>
+              <span className="block w-full xs:hidden mb-2">
+                {listing.name}
+              </span>
               <div className="flex gap-2">
                 <span className="hidden xs:flex">{listing.name} - </span>
                 {listing.offer
@@ -108,7 +114,10 @@ export default function ListingPage() {
               </p>
               {listing.offer && (
                 <p className="bg-green-900 w-full max-w-[200px] text-white text-center p-1 rounded-md">
-                  {(listing.regularPrice - listing.discountPrice).toLocaleString('en-US')} تخفیف
+                  {(
+                    listing.regularPrice - listing.discountPrice
+                  ).toLocaleString("en-US")}{" "}
+                  تخفیف
                 </p>
               )}
             </div>
@@ -136,6 +145,12 @@ export default function ListingPage() {
                 </li>
               )}
             </ul>
+            {currentUser && listing.userRef !== currentUser._id && !contact &&  (
+              <button onClick={()=>setContact(true)} className="bg-slate-700 text-white rounded-lg hover:opacity-95 p-3 mt-5">
+                تماس با مالک
+              </button>
+            )}
+            {contact && <Contact listing={listing} />}
           </div>
         </div>
       )}

@@ -17,7 +17,7 @@ export default function Navbar() {
 
         {/* mobile menu */}
 
-        <ul className="sm:hidden  border-b-transparent border-[1px] xs:gap-12 gap-6 items-center justify-center w-full py-3 text-lg xs:text-xl bg-slate-200 flex fixed bottom-0 right-0 rounded-tr-full rounded-tl-full shadow-[0_25px_50px_15px_rgba(0,0,0,.4)]">
+        <ul className="sm:hidden  border-b-transparent border-[1px] xs:gap-12 gap-6 items-center justify-center w-full py-3 text-lg xs:text-xl bg-slate-200 flex fixed bottom-0 right-0 rounded-tr-full rounded-tl-full shadow-[0_25px_50px_15px_rgba(0,0,0,.4)] z-50">
           <Link to={"/"}>
             <li className="text-slate-700 hover:text-black duration-300 flex  gap-1">
               <FaHome />
