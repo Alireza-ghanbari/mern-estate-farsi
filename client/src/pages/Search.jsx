@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { PulseLoader } from "react-spinners";
+import ListingCard from "../components/ListingCard";
 
 export default function Search() {
   const navigate = useNavigate();
@@ -14,7 +16,7 @@ export default function Search() {
   });
   const [loading, setLoading] = useState(false);
   const [listings, setListings] = useState([]);
-  console.log(listings)
+  console.log(listings);
 
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
@@ -47,12 +49,12 @@ export default function Search() {
     }
 
     const fetchListings = async () => {
-        setLoading(true)
-        const searchQuery = urlParams.toString()
-        const res = await fetch(`/api/listing/get?${searchQuery}`)
-        const data = await res.json()
-        setListings(data)
-        setLoading(false)
+      setLoading(true);
+      const searchQuery = urlParams.toString();
+      const res = await fetch(`/api/listing/get?${searchQuery}`);
+      const data = await res.json();
+      setListings(data);
+      setLoading(false);
     };
 
     fetchListings();
@@ -107,7 +109,7 @@ export default function Search() {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row">
+    <div className="flex flex-col lg:flex-row pb-24 lg:pb-0">
       <div className=" p-3 xs:p-7 border-b-2 lg:border-r-2 lg:min-h-screen">
         <form className="flex flex-col gap-8" onSubmit={handleSubmit}>
           <div className="flex items-center gap-2">
@@ -212,10 +214,27 @@ export default function Search() {
         </form>
       </div>
 
-      <div className="">
+      <div className="flex-1 lg:pb-12">
         <h1 className="text-2xl font-semibold border-b p-3 text-slate-700 lg:mt-5">
           نتایج :
         </h1>
+
+        <div className="sm:p-7 p-3 flex flex-wrap gap-6">
+          {!loading && listings.length === 0 && (
+            <p className="text-xl text-slate-700">آگهی یافت نشد !</p>
+          )}
+          {loading && (
+            <div className="w-full text-center">
+              <PulseLoader size={10} />
+            </div>
+          )}
+
+          {!loading &&
+            listings &&
+            listings.map((listing) => (
+              <ListingCard key={listing._id} listing={listing} />
+            ))}
+        </div>
       </div>
     </div>
   );
