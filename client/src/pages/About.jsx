@@ -3,8 +3,11 @@ import React from "react";
 export default function About() {
   return (
     <div className="py-20 px-2 xs:px-8 max-w-6xl mx-auto">
-      <h1 className="xs:text-3xl text-2xl font-bold mb-4 text-slate-700">
-        درباره ی <span className="text-slate-500">Alireza</span>Estate
+      <h1 className="xs:text-3xl text-2xl font-bold mb-4 text-slate-700 flex justify-between">
+        <span>درباره ی</span>
+        <span>
+        <span className="text-slate-500">Alireza</span>Estate
+        </span>
       </h1>
       <p className="mb-4 text-slate-700">
         لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده

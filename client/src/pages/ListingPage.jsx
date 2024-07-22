@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { PulseLoader } from "react-spinners";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -15,6 +15,7 @@ import {
   FaShare,
 } from "react-icons/fa";
 import Contact from "../components/Contact";
+import {Link } from "react-router-dom"
 
 export default function ListingPage() {
   SwiperCore.use([Navigation]);
@@ -27,6 +28,7 @@ export default function ListingPage() {
   const { currentUser } = useSelector((state) => state.user);
 
   const params = useParams();
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchListing = async () => {
@@ -48,6 +50,26 @@ export default function ListingPage() {
     };
     fetchListing();
   }, [params.listingId]);
+
+
+  const handleDeleteListing = async (listingId) => {
+    try {
+      const res = await fetch(`/api/listing/delete/${listingId}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        console.log(data.message);
+        return;
+      }
+      
+      navigate('/')
+      
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   return (
     <main className="pb-24">
       {loading && (
@@ -145,12 +167,29 @@ export default function ListingPage() {
                 </li>
               )}
             </ul>
-            {currentUser && listing.userRef !== currentUser._id && !contact &&  (
-              <button onClick={()=>setContact(true)} className="bg-slate-700 text-white rounded-lg hover:opacity-95 p-3 mt-5">
+            {currentUser && listing.userRef !== currentUser._id && !contact && (
+              <button
+                onClick={() => setContact(true)}
+                className="bg-slate-700 text-white rounded-lg hover:opacity-95 p-3 mt-5"
+              >
                 تماس با مالک
               </button>
             )}
             {contact && <Contact listing={listing} />}
+
+            {listing.userRef === currentUser?._id && (
+              <div className=" flex gap-4 mt-5">
+                <Link to={`/update-listing/${listing._id}`}>
+                  <button className="text-green-700 font-bold text-lg">ویرایش</button>
+                </Link>
+                <button
+                  onClick={() => handleDeleteListing(listing._id)}
+                  className="text-red-700 font-bold text-lg"
+                >
+                  پاک کردن
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}

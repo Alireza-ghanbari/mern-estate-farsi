@@ -5,13 +5,19 @@ import SwiperCore from "swiper";
 import { Navigation } from "swiper/modules";
 import "swiper/css/bundle";
 import ListingCard from "../components/ListingCard";
+import { FaPlus } from "react-icons/fa";
 
 export default function Home() {
   const [offer, setOffer] = useState([]);
   const [sale, setSale] = useState([]);
   const [rent, setRent] = useState([]);
+  const [modal, setModal] = useState(true);
 
   SwiperCore.use([Navigation]);
+
+  setTimeout(()=>{
+    setModal(false)
+  },[4000])
 
   useEffect(() => {
     const fetchOfferListings = async () => {
@@ -75,7 +81,7 @@ export default function Home() {
         {offer &&
           offer.length > 0 &&
           offer.map((listing) => (
-            <SwiperSlide>
+            <SwiperSlide key={listing._id}>
               <div
                 style={{
                   background: `url(${listing.imageUrls[0]}) center no-repeat`,
@@ -105,8 +111,8 @@ export default function Home() {
               </Link>
             </div>
             <div className="flex flex-wrap gap-6">
-              {offer.map((listing) => (
-                <ListingCard listing={listing} key={listing._id} />
+              {offer.map((listing, index) => (
+                <ListingCard listing={listing} key={index} />
               ))}
             </div>
           </div>
@@ -126,15 +132,15 @@ export default function Home() {
               </Link>
             </div>
             <div className="flex flex-wrap gap-6">
-              {rent.map((listing) => (
-                <ListingCard listing={listing} key={listing._id} />
+              {rent.map((listing, index) => (
+                <ListingCard listing={listing} key={index} />
               ))}
             </div>
           </div>
         )}
 
         {sale && sale.length > 0 && (
-          <div className="">
+          <div className="pb-20">
             <div className="my-3">
               <h2 className="text-2xl font-semibold text-slate-600 my-1">
                 فروشی های اخیر
@@ -147,13 +153,18 @@ export default function Home() {
               </Link>
             </div>
             <div className="flex flex-wrap gap-6">
-              {sale.map((listing) => (
-                <ListingCard listing={listing} key={listing._id} />
+              {sale.map((listing, index) => (
+                <ListingCard listing={listing} key={index} />
               ))}
             </div>
           </div>
         )}
       </div>
+
+      <Link to={'/create-listing'} className="fixed sm:bottom-14 bottom-16 sm:left-8 left-4 z-50 p-3 bg-blue-800 rounded-xl cursor-pointer hover:opacity-90 hidden xs:inline-block">
+        <FaPlus color="white" size={24} onMouseOver={() => setModal(true)} />
+      </Link>
+      {modal && <div className=" fixed sm:bottom-28 bottom-[118px] sm:left-8 left-4 z-50 px-3 py-2 rounded-tl-lg rounded-br-lg bg-white border border-slate-300 shadow-md">افزودن آگهی</div>}
     </div>
   );
 }
